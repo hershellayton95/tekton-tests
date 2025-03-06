@@ -9,7 +9,7 @@ spec:
     - name: url
       value: https://github.com/hershellayton95/tekton-tests
     - name: revision
-      value: add-a-simple-pipeline
+      value: main
     - name: pathInRepo
       value: ./resolver/pipeline.yaml
   params:
