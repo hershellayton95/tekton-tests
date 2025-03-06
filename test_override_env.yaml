@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-defaults
+  namespace: tekton-pipelines
+data:
+  default-timeout-minutes: "50"
+  default-service-account: "tekton"
+  default-forbidden-env: "TEST_TEKTON"
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: mytask
+  namespace: default
+spec:
+  steps:
+    - name: echo-env
+      image: ubuntu
+      command: ["bash", "-c"]
+      args: ["echo $TEST_TEKTON "]
+      env:
+          - name: "TEST_TEKTON"
+            value: "true"
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: mytaskrun
+  namespace: default
+spec:
+  taskRef:
+    name: mytask
+  podTemplate:
+    env:
+        - name: "TEST_TEKTON"
+          value: "false"
