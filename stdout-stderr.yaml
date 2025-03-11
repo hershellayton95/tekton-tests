@@ -1,0 +1,35 @@
+apiVersion: tekton.dev/v1 # or tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: boskos-acquire
+spec:
+  results:
+  - name: project-id
+  steps:
+  - name: boskosctl
+    image: gcr.io/k8s-staging-boskos/boskosctl
+    args:
+    - acquire
+    - --server-url=http://boskos.test-pods.svc.cluster.local
+    - --owner-name=christie-test-boskos
+    - --type=gke-project
+    - --state=free
+    - --target-state=busy
+    stdoutConfig:
+      path: /data/boskosctl-stdout
+    volumeMounts:
+    - name: data
+      mountPath: /data
+  - name: parse-project-id
+    image: imega/jq
+    args:
+    - -r
+    - .name
+    - /data/boskosctl-stdout
+    stdoutConfig:
+      path: $(results.project-id.path)
+    volumeMounts:
+    - name: data
+      mountPath: /data
+  volumes:
+  - name: data

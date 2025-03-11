@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1
+kind: TaskRun
+metadata:
+  generateName: echo-hello-world-run-
+spec:
+  debug:
+    breakpoints:
+      onFailure: "enabled"
+  retries: 3
+  taskSpec:
+    results:
+      - name: result1
+      - name: result2
+    steps:
+    - name: ignore-failure-and-produce-a-result
+      workingDir: $(workspaces.shared-data.path)
+      # onError: continue
+      image: busybox
+      script: |
+        echo 123 | tee $(results.result1.path)
+        exit 1 
+        echo 456 | tee $(results.result2.path)   
+    - name: echo2
+      workingDir: $(workspaces.shared-data.path)
+      image: ubuntu
+      script: |
+        cat $(results.result1.path)
+  workspaces:
+  - name: shared-data
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi

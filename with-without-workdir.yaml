@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1
+kind: TaskRun
+metadata:
+  generateName: with-without-workdir-task-run-
+spec:
+  taskSpec:
+    steps:
+    - name: with-workdir
+      workingDir: $(workspaces.shared-data.path)
+      # onError: continue
+      image: busybox
+      script: |
+        echo 123 | tee with-workdir.txt
+    - name: without-workdir
+      # workingDir: $(workspaces.shared-data.path)
+      # onError: continue
+      image: busybox
+      script: |
+        echo 123 | tee without-workdir.txt
+        sleep 3600  
+  workspaces:
+  - name: shared-data
+    emptyDir: {}
