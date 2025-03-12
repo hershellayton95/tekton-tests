@@ -1,0 +1,39 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: example-stepaction-name-run
+spec:
+  taskRef:
+    name: example-stepaction-name-task
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: example-stepaction-name-task
+spec:
+  steps:
+    - name: example-stepaction-name-02
+      ref: 
+        name: example-stepaction-name
+    - name: example-stepaction-name-02
+      ref: 
+        name: example-stepaction-name
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: StepAction
+metadata:
+  name: example-stepaction-name
+spec:
+  env:
+    - name: HOME
+      value: /home
+  params:
+    - name: numbers_file
+      type: string
+  image: ubuntu
+  # command: ["ls"]
+  # args: ["-lh"]
+  script: |
+    #!/bin/sh
+    

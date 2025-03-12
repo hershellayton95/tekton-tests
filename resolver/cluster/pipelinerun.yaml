@@ -1,0 +1,17 @@
+kind: PipelineRun
+apiVersion: tekton.dev/v1beta1
+metadata:
+  name: run-basic-pipeline-from-git
+spec:
+  pipelineRef:
+    resolver: cluster
+    params:
+    - name: kind
+      value: pipeline
+    - name: name
+      value: a-simple-pipeline
+    - name: namespace
+      value: tekton-pipelines
+  params:
+  - name: username
+    value: filippo

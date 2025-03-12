@@ -7,11 +7,7 @@ spec:
     resolver: git
     params:
     - name: url
-      value: https://github.com/hershellayton95/tekton-tests
-    - name: revision
-      value: main
-    - name: pathInRepo
-      value: ./resolver/pipeline.yaml
+      value: https://github.com/hershellayton95/tekton-tests/main/resolver/http/pipeline.yaml
   params:
   - name: username
     value: filippo
