@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1beta1
+kind: StepAction
+metadata:
+  name: passed-result
+spec:
+  results:
+    - name: result001
+  env:
+    - name: PASSED_PARAM
+      value: $(params.passed-param)
+  params: 
+    - name: passed-param
+      default: default
+  image: ubuntu
+  script: |
+    #!/bin/bash
+    echo $PASSED_PARAM | tee $(step.results.result001.path)

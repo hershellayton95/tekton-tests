@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: example-stepaction-name-run
+spec:
+  params:
+    - name: command
+      value: "echo"
+    - name: message
+      value: "hello world!"
+  taskRef:
+    name: example-stepaction-name-task

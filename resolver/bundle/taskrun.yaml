@@ -8,7 +8,7 @@ spec:
     resolver: bundles
     params:
     - name: bundle
-      value: docker.io/hershellayton95/tekton-hello-bundle:0.0.3
+      value: docker.io/hershellayton95/tekton-hello-bundle:0.0.4
     - name: name
       value: hello-task
     - name: kind

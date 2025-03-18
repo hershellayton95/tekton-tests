@@ -1,0 +1,27 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: test-results-emission-task
+spec:
+  results:
+    - name: result01
+  steps:
+    - name: test-results-emission-step-01
+      image: ubuntu
+      script: |
+        #!/bin/bash
+        echo -n "result01" | tee $(results.result01.path)
+    - name: test-results-emission-step-072
+      image: ubuntu
+      script: |
+        #!/bin/bash
+        echo $(results.result01.path)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: test-results-emission-run
+spec:
+  taskRef:
+    name: test-results-emission-task
+---

@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: StepAction
+metadata:
+  name: passed-params-result
+spec:
+  # env:
+  #   - name: PASSED_PARAM
+  #     value: $(params.passed-param)
+  params:
+    - name: passed-param
+      type: array
+  image: ubuntu
+  command: ["echo"]
+  args: ["$(params.passed-param)"]
+  # script: |
+  #   echo $PASSED_PARAM

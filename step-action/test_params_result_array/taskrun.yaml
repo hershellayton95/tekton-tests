@@ -1,0 +1,10 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: passed-params-result-run
+spec:
+  params:
+    - name: passed-param
+      value: ["questo", "è", "un", "array"]
+  taskRef:
+    name: passed-params-result-task

@@ -1,0 +1,93 @@
+apiVersion: tekton.dev/v1beta1
+kind: StepAction
+metadata:
+  name: test-results-emission-stepaction-01
+spec:
+  results:
+    - name: result01
+      description: The current date in human readable format
+  image: ubuntu
+  script: | 
+    #!/bin/sh
+    echo test1
+    date | tee $(step.results.result01.path)
+---
+apiVersion: tekton.dev/v1beta1
+kind: StepAction
+metadata:
+  name: test-results-emission-stepaction-02
+spec:
+  results:
+    - name: result01
+      description: The current date in human readable format
+  image: ubuntu
+  script: | 
+    #!/bin/sh
+    date +%s | tee $(step.results.result01.path)
+---
+apiVersion: tekton.dev/v1beta1
+kind: StepAction
+metadata:
+  name: test-results-emission-stepaction-03
+spec:
+  params:
+  - name: result01-01
+  - name: result01-02
+  image: ubuntu
+  command: ["echo"]
+  args: ["$(params.result01-01)","$(params.result01-02)"]
+---
+apiVersion: tekton.dev/v1beta1
+kind: StepAction
+metadata:
+  name: test-results-emission-stepaction-04
+spec:
+  env:
+  - name: RESULT_01_01
+    value: $(params.result01-01)
+  - name: RESULT_01_02
+    value: $(params.result01-02)
+  params:
+  - name: result01-01
+  - name: result01-02
+  image: ubuntu
+  script: | 
+    #!/bin/sh
+    echo $RESULT_01_01 $RESULT_01_02
+---
+apiVersion: tekton.dev/v1beta1
+kind: StepAction
+metadata:
+  name: test-results-emission-stepaction-06
+spec:
+  env:
+  - name: RESULT_02_01
+    value: "$(params.result02-01)"
+  params:
+  - name: result02-01
+    type: string
+  image: ubuntu
+  # script: | 
+  #   #!/bin/sh
+  #   echo $RESULT_02_01
+  command: [echo]
+  args: ["$(params.result02-01)"]
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: StepAction
+metadata:
+  name: test-results-emission-stepaction-08
+spec:
+  env:
+  - name: RESULT_01_01
+    value: "$(params.result01-01)"
+  params:
+  - name: result01-01
+    type: string
+  image: ubuntu
+  # script: | 
+  #   #!/bin/sh
+  #   echo $RESULT_01_01
+  command: [cat]
+  args: ["$(params.result01-01)"]

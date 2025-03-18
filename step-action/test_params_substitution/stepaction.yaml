@@ -1,0 +1,34 @@
+apiVersion: tekton.dev/v1beta1
+kind: StepAction
+metadata:
+  name: example-stepaction-name
+spec:
+  env:
+    - name: PARAM
+      value: $(params.message)
+  params:
+    - name: command
+      type: string
+      description: "this is a param that the step action needs."
+    - name: message
+      type: string
+  image: ubuntu
+
+  # command: ["ls"]
+  # args: ["-lh"]
+
+  # command: ["echo"]
+  # args: ["$(params.message)"]
+
+  # command: ["$(params.command)"]
+  # args: ["$(params.message)"]
+
+# NOT ALLOWED
+  # script: | 
+  #   #!/bin/sh
+  #   echo $(params.message)
+
+# ALLOWED
+  script: | 
+    #!/bin/sh
+    echo $PARAM

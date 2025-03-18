@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: passed-params-result-task
+spec:
+  params:
+    - name: passed-param
+      type: array
+  steps:
+    - name: passed-params-result-step-001
+      image: ubuntu
+      command: ["echo"]
+      args: ["$(params.passed-param)"]
+      env:
+        - name: PASSED_PARAM
+          value: $(params.passed-param)
+    - name: passed-params-result-step-002
+      ref: 
+        name: passed-params-result
+      params:
+      - name: passed-param
+        value: $(params.passed-param)

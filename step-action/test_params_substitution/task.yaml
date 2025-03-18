@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: example-stepaction-name-task
+spec:
+  params:
+    - name: command
+      type: string
+    - name: message
+      type: string
+      description: "this is a param that the step action needs."
+  steps:
+    - name: example-stepaction-name
+    
+      # image: ubuntu
+      # script: |
+      #   #!/bin/sh
+      #   echo $(params.message)
+
+      ref: 
+        name: example-stepaction-name
+      params:
+      - name: command
+        value: $(params.command)
+      - name: message
+        value: $(params.message)

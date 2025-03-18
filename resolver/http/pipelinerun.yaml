@@ -1,13 +1,13 @@
 kind: PipelineRun
 apiVersion: tekton.dev/v1beta1
 metadata:
-  name: run-basic-pipeline-from-git
+  name: run-basic-pipeline-from-http
 spec:
   pipelineRef:
-    resolver: git
+    resolver: http
     params:
     - name: url
-      value: https://github.com/hershellayton95/tekton-tests/main/resolver/http/pipeline.yaml
+      value: https://raw.githubusercontent.com/hershellayton95/tekton-tests/main/resolver/http/pipeline.yaml
   params:
   - name: username
     value: filippo

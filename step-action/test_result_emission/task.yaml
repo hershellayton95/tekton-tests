@@ -1,0 +1,63 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: test-results-emission-task
+spec:
+  results:
+    - name: result01-01
+      value: $(steps.test-results-emission-step-01.results.result01)
+    - name: result01-02
+      value: $(steps.test-results-emission-step-02.results.result01)
+    - name: result02-01
+  steps:
+    - name: test-results-emission-step-01
+      ref: 
+        name: test-results-emission-stepaction-01
+    - name: test-results-emission-step-02
+      ref: 
+        name: test-results-emission-stepaction-02
+    - name: test-results-emission-step-03
+      ref: 
+        name: test-results-emission-stepaction-03
+      params:
+      - name: result01-01
+        value: $(steps.test-results-emission-step-01.results.result01)
+      - name: result01-02
+        value: $(steps.test-results-emission-step-02.results.result01)
+    - name: test-results-emission-step-04
+      ref: 
+        name: test-results-emission-stepaction-04
+      params:
+      - name: result01-01
+        value: $(steps.test-results-emission-step-01.results.result01)
+      - name: result01-02
+        value: $(steps.test-results-emission-step-02.results.result01)
+    - name: test-results-emission-step-05
+      image: ubuntu
+      script: |
+        #!/bin/bash
+        echo -n "result02-01" | tee $(results.result02-01.path)
+    - name: test-results-emission-step-06
+      ref: 
+        name: test-results-emission-stepaction-06
+      params:
+      - name: result02-01
+        value: $(results.result02-01.path)
+    - name: test-results-emission-step-07
+      image: ubuntu
+      script: |
+        #!/bin/bash
+        echo $(results.result02-01.path)
+    - name: test-results-emission-step-08
+      onError: continue
+      ref: 
+        name: test-results-emission-stepaction-08
+      params:
+      - name: result01-01
+        value: $(results.result01-01.path)
+    - name: test-results-emission-step-08-bis
+      ref: 
+        name: test-results-emission-stepaction-08
+      params:
+      - name: result01-01
+        value: $(steps.test-results-emission-step-02.results.result01.path)

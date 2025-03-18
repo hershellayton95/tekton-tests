@@ -1,0 +1,7 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: passed-result-run
+spec:
+  taskRef:
+    name: passed-result-task

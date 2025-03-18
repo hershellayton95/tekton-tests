@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: passed-result-task
+spec:
+  steps:
+    - name: result-emitter
+      ref: 
+        name: passed-result
+    - name: result-inline-receiver
+      image: ubuntu
+      env:
+        - name: PASSED_PARAM
+          value: $(steps.result-emitter.results.result001)
+      results: 
+      - name: result001
+      script: |
+        #!/bin/bash
+        echo $PASSED_PARAM
+        echo inline | tee $(step.results.result001.path)
+    - name: result-stepaction-receiver
+      ref: 
+        name: passed-result
+      params:
+      - name: passed-param
+        value: $(steps.result-inline-receiver.results.result001)
